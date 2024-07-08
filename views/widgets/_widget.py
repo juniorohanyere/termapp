@@ -32,19 +32,13 @@ class Widget:
             width (int): width of the widget.
             y: vertical position to anchor the widget.
             x: horizontal position to anchor the widget.
-
-        Return:
-            return a tuple object containing a curses window and a curses
-            panel.
         """
 
         self._win = master._win.derwin(*args)
         self.set_color(fg, bg)
 
-        pan = panel.new_panel(self._win)
-        pan.hide()
-
-        return (self._win, pan)
+        self._pan = panel.new_panel(self._win)
+        self.hide()
 
     def _create_label(self):
         """create a new label.
@@ -80,8 +74,7 @@ class Widget:
         else:
             fg, bg = color, color
 
-        self._win, self._pan = self._create_widget(master, fg, bg, height,
-                                                   width, y, x)
+        self._create_widget(master, fg, bg, height, width, y, x)
         # based on multiline and alignment
         self._win.addstr(0, 0, text)
 
@@ -109,3 +102,11 @@ class Widget:
         self._win.bkgd(' ', pair_no)
 
         self._kwargs['color'] = (fg, bg)
+
+    def show(self):
+        self._pan.show()
+        self._win.refresh()
+
+    def hide(self):
+        self._pan.hide()
+        self._win.refresh()
