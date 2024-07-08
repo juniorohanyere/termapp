@@ -13,9 +13,10 @@ class TGUI:
         """Initialize self. See help(type(self)) for accurate signature.
         """
 
-    def tgui(self, stdscr):
+    def main(self, stdscr):
         """Callback method for curses.wrapper function, called before the run
         method.
+        Serves as the entry point for a user program.
 
         Args:
             stdscr (obj): curses window object representing the default screen
@@ -28,9 +29,9 @@ class TGUI:
         # set screen properties
         curses.curs_set(0)
 
-        # other inits goes here...
+        # other curses inits goes here...
 
         return stdscr
 
     def run(self):
-        curses.wrapper(self.tgui)
+        curses.wrapper(self.main)

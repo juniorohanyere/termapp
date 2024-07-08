@@ -1,12 +1,14 @@
 import curses
 from curses import panel
 
-from . import tgui
+from .tgui import TGUI
 
-class Layout(tgui.TGUI):
-    def __init__(self, cls, **kwargs):
+class Layout(TGUI):
+    def __init__(self, **kwargs):
         """Initialize self. See help(type(self)) for accurate signature.
         """
+
+        self._kwargs = kwargs
 
         super(Layout, self).__init__()
 
