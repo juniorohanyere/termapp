@@ -49,12 +49,12 @@ class Label(Widget):
 
             kw[key] = value
 
-        super(Label, self).__init__(kw)
-
+        super(Label, self).__init__()
+        self._kwargs = kw
         self._master = master
 
         # now create a new label widget
-        self._win, self._pan = self._create_label()
+        self._create_label()
 
     def set_anchor(self, y, x):
         """Set anchor for the label.

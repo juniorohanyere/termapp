@@ -11,14 +11,14 @@ class Widget:
     """Base widget class.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         """Initialize self. See help(type(self)) for accurate signature.
 
         Args:
             kwargs: variable length keyworded arguments.
         """
 
-        self._kwargs = kwargs
+        self._kwargs = {}
         self._color_pair_no = 0
 
     def _create_widget(self, master, fg, bg, *args):
@@ -38,13 +38,13 @@ class Widget:
             panel.
         """
 
-        win = master._win.derwin(args)
+        self._win = master._win.derwin(*args)
         self.set_color(fg, bg)
 
-        pan = panel.new_panel(win)
+        pan = panel.new_panel(self._win)
         pan.hide()
 
-        return (win, pan)
+        return (self._win, pan)
 
     def _create_label(self):
         """create a new label.

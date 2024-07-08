@@ -30,5 +30,7 @@ class TGUI:
 
         # other curses inits goes here...
 
+        self._win.getch()
+
     def run(self):
         curses.wrapper(self.main)
