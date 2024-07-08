@@ -51,16 +51,39 @@ class Widget:
         """
 
         master = self._master
-        height, width = self._kwargs.get('size')
-        y, x = self._kwargs.get('anchor')
-        fg, bg = self._kwargs.get('color')
+        size = self._kwargs.get('size')
+        anchor = self._kwargs.get('anchor')
+        color = self._kwargs.get('color')
         text = self._kwargs.get('text')
+
+        text = text if text else ''
+
+        if size is None:
+            # wrap content
+            height, width = 1, len(text) + 1
+        elif isinstance(size, tuple):
+            height, width = size
+        else:
+            height, width = size, size
+
+        if anchor is None:
+            y, x = 0, 0     # XXX
+        elif isinstance(anchor, tuple):
+            y, x = anchor
+        else:
+            y, x = anchor, anchor
+
+        if color is None:
+            fg, bg = curses.COLOR_BLACK, curses.COLOR_WHITE
+        elif isinstance(color, tuple):
+            fg, bg = color
+        else:
+            fg, bg = color, color
 
         self._win, self._pan = self._create_widget(master, fg, bg, height,
                                                    width, y, x)
-        if text:
-            # based on multiline and alignment
-            self._win.addstr(text)
+        # based on multiline and alignment
+        self._win.addstr(0, 0, text)
 
     def _set_color_pair(self, fg, bg):
         """Initialize color pair for the widget.
