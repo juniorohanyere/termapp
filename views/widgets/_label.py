@@ -49,8 +49,7 @@ class Label(Widget):
 
             kw[key] = value
 
-        super(Label, self).__init__()
-        self._kwargs = kw
+        super(Label, self).__init__(kw)
         self._master = master
 
         # now create a new label widget
