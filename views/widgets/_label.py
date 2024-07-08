@@ -41,7 +41,7 @@ class Label(Widget):
 
         for key, value in kwargs.items():
             if key not in kw.keys():
-                err = f'{Label.__init__() got an unexpected keyword argument '
+                err = 'Label.__init__() got an unexpected keyword argument '
                 err += f"'{key}'"
                 raise TypeError(err)
 
