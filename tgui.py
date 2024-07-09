@@ -15,7 +15,7 @@ class TGUI:
 
         self._kwargs = a_dict
 
-    def main(self, window):
+    def app(self, gui):
         """Callback method for curses.wrapper function, called before the run
         method.
         Serves as the entry point for a user program.
@@ -25,7 +25,7 @@ class TGUI:
                           created by curses.initscr().
         """
 
-        self._win = window
+        self._win = gui
 
         # set screen properties
         curses.curs_set(0)
