@@ -8,10 +8,6 @@ class Layout(TGUI):
         """Initialize self. See help(type(self)) for accurate signature.
         """
 
-        self._kwargs = kwargs
-
-        super(Layout, self).__init__()
-
         kw = {'master': None, 'height': 0, 'width': 0, 'y': 0, 'x': 0,
               'fg': None, 'bg': None, 'orient': None, 'pad_l': 1, 'pad_r': 1,
               'pad_t': 1, 'pad_b': 1}
@@ -26,7 +22,9 @@ class Layout(TGUI):
 
             kw[key] = value
 
-        self.master = kw.get('master')
+        super(Layout, self).__init__(a_dict=kw)
+
+        self._master = kw.get('master')
         self._height, self._width = kw.get('height'), kw.get('width')
         self._y, self._x = kw.get('y'), kw.get('x')
         self._fg, self._bg = kw.get('fg'), kw.get('bg')

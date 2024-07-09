@@ -1,4 +1,4 @@
-"""Module to handle widget.
+"""Base widget module.
 """
 
 import asyncio
@@ -15,17 +15,17 @@ class Widget:
         """Initialize self. See help(type(self)) for accurate signature.
 
         Args:
-            kwargs: variable length keyworded arguments.
+            a_dict (dict): dict containing keyworded arguments.
         """
 
         self._kwargs = a_dict
         self._color_pair_no = 0
 
-    def _create_widget(self, master, fg, bg, *args):
+    def _create_widget(self, layout, fg, bg, *args):
         """Creates a new widget object.
 
         Args:
-            master (obj): layout object on which the widget is to be created.
+            layout (obj): layout object on which the widget is to be created.
             fg (int): foreground color of the widget.
             bg (int): background color of the widget.
             height (int): height of the widget.
@@ -34,7 +34,7 @@ class Widget:
             x: horizontal position to anchor the widget.
         """
 
-        self._win = master._win.derwin(*args)
+        self._win = layout._win.derwin(*args)
         self.set_color(fg, bg)
 
         self._pan = panel.new_panel(self._win)
@@ -44,7 +44,6 @@ class Widget:
         """create a new label.
         """
 
-        master = self._master
         size = self._kwargs.get('size')
         anchor = self._kwargs.get('anchor')
         color = self._kwargs.get('color')
@@ -74,7 +73,7 @@ class Widget:
         else:
             fg, bg = color, color
 
-        self._create_widget(master, fg, bg, height, width, y, x)
+        self._create_widget(self.layout, fg, bg, height, width, y, x)
         # based on multiline and alignment
         self._win.addstr(0, 0, text)
 
