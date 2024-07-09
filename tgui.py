@@ -5,7 +5,7 @@ import curses
 from curses import wrapper
 
 
-class TApp:
+class TermApp:
     """Base class.
     """
 
@@ -15,7 +15,7 @@ class TApp:
 
         self._kwargs = a_dict
 
-    def tapp(self, gui):
+    def app(self, gui):
         """Callback method for curses.wrapper function, called before the run
         method.
         Serves as the entry point for a user program.
