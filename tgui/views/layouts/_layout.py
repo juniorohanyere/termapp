@@ -18,7 +18,6 @@ class Layout(TGUI):
                 error += f"'{key}'"
 
                 raise TypeError(strerr)
-                return 1
 
             kw[key] = value
 
