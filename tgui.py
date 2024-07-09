@@ -9,9 +9,11 @@ class TGUI:
     """Base class.
     """
 
-    def __init__(self):
+    def __init__(self, a_dict={}):
         """Initialize self. See help(type(self)) for accurate signature.
         """
+
+        self._kwargs = a_dict
 
     def main(self, window):
         """Callback method for curses.wrapper function, called before the run

@@ -11,14 +11,14 @@ class Widget:
     """Base widget class.
     """
 
-    def __init__(self, kwargs={}):
+    def __init__(self, a_dict={}):
         """Initialize self. See help(type(self)) for accurate signature.
 
         Args:
             kwargs: variable length keyworded arguments.
         """
 
-        self._kwargs = kwargs
+        self._kwargs = a_dict
         self._color_pair_no = 0
 
     def _create_widget(self, master, fg, bg, *args):

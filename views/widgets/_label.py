@@ -49,7 +49,9 @@ class Label(Widget):
 
             kw[key] = value
 
-        super(Label, self).__init__(kw)
+        super(Label, self).__init__(a_dict=kw)
+
+        # TODO check if master is a layout object
         self._master = master
 
         # now create a new label widget
