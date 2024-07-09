@@ -5,7 +5,7 @@ import curses
 from curses import wrapper
 
 
-class TGUI:
+class TApp:
     """Base class.
     """
 
@@ -15,7 +15,7 @@ class TGUI:
 
         self._kwargs = a_dict
 
-    def app(self, gui):
+    def tapp(self, gui):
         """Callback method for curses.wrapper function, called before the run
         method.
         Serves as the entry point for a user program.
