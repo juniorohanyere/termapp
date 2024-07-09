@@ -50,7 +50,7 @@ class Label(Widget):
 
             kw[key] = value
 
-        super(Label, self).__init__(a_dict=kw)
+        super().__init__(**kw)
 
         # TODO check if layout is a valid layout object
         self._layout = layout

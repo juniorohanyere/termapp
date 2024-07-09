@@ -5,28 +5,26 @@ from ._layout import Layout
 
 
 class LinearLayout(Layout):
-    def __init__(self, **kwargs):
+    def __init__(self, layout=None, **kwargs):
         """None means to fit content (curses.window.resize is called)
         0 means to fill parent
         """
 
-        super(LinearLayout, self).__init(kwargs)
-
-        kw = {'master': None, 'height': 0, 'width': 0, 'anchor_y': 0,
-              'anchor_x': 0, 'fg': None, 'bg': None, 'orient': 'horizontal'}
+        kw = {'size': 0, 'anchor': None, 'orient': 'horizontal', 'wrap': False,
+              'color': None, 'padding': 0}
 
         for key, value in kwargs.items():
             if key not in kw.keys():
                 error = 'LinearLayout.__init__() '
-                error += 'got an unexpected keyword argument '
-                error += f"'{key}'"
-                raise TypeError(error)
+                error += f"got an unexpected keyword argument '{key}'"
 
-                return 1
+                raise TypeError(error)
 
             kw[key] = value
 
-        self._master = kw.get('master')
+        super().__init__(layout, kw)
+
+        self._layout = layout if layout is None else self
         self._height = kw.get('height'), self._width = kw.get('width')
         self._anchor_y = kw.get('anchor_y'), self._anchor_x = kw.get('anchor_x'
                                                                     )

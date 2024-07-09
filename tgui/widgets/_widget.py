@@ -6,22 +6,23 @@ import curses
 from curses import panel
 import os
 
+from .. import _tgui
 
 class Widget:
     """Base widget class.
     """
 
-    def __init__(self, a_dict={}):
+    def __init__(self, **kwargs):
         """Initialize self. See help(type(self)) for accurate signature.
 
         Args:
-            a_dict (dict): dict containing keyworded arguments.
+            kwargs (dict): dict containing keyworded arguments.
         """
 
-        self._kwargs = a_dict
-        self._color_pair_no = 0
+        self._kwargs = kwargs
+        self._layout = None
 
-    def _create_widget(self, layout, fg, bg, *args):
+    def _create_widget(self, color, *args):
         """Creates a new widget object.
 
         Args:
@@ -34,8 +35,8 @@ class Widget:
             x: horizontal position to anchor the widget.
         """
 
-        self._win = layout._win.derwin(*args)
-        self.set_color(fg, bg)
+        self._win = self._layout._win.derwin(*args)
+        self.set_color(color)
 
         self._pan = panel.new_panel(self._win)
         self.hide()
@@ -60,47 +61,35 @@ class Widget:
             height, width = size, size
 
         if anchor is None:
-            y, x = 0, 0     # XXX
+            error = 'anchor widget at next available position'
+            raise NotImplementedError(error)
+
         elif isinstance(anchor, tuple):
             y, x = anchor
         else:
             y, x = anchor, anchor
 
+        self._create_widget(color, height, width, y, x)
+        # based on multiline and alignment
+        self._win.addstr(0, 0, text)
+
+    def set_color(self, color):
+        """Set or reset the foreground and background color of the widget.
+        """
+
         if color is None:
+            # TODO use the terminal default display color
             fg, bg = curses.COLOR_BLACK, curses.COLOR_WHITE
         elif isinstance(color, tuple):
             fg, bg = color
         else:
             fg, bg = color, color
 
-        self._create_widget(self.layout, fg, bg, height, width, y, x)
-        # based on multiline and alignment
-        self._win.addstr(0, 0, text)
-
-    def _set_color_pair(self, fg, bg):
-        """Initialize color pair for the widget.
-
-        Args:
-            fg (int): foreground color of the widget.
-            bg (int): background color of the widget.
-
-        Return:
-            return the pair number of the color.
-        """
-
-        self._color_pair_no += 1
-        curses.init_pair(self._color_pair_no, fg, bg)
-
-        return curses.color_pair(self._color_pair_no)
-
-    def set_color(self, fg, bg):
-        """Set or reset the foreground and background color of the widget.
-        """
-
-        pair_no = self._set_color_pair(fg, bg)
+        color_pair = (fg, bg)
+        pair_no = self._layout._color_pairs.get(color_pair)
         self._win.bkgd(' ', pair_no)
 
-        self._kwargs['color'] = (fg, bg)
+        self._kwargs['color'] = color_pair
 
     def show(self):
         self._pan.show()

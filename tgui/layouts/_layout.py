@@ -1,57 +1,90 @@
 import curses
 from curses import panel
 
-from .tgui import TGUI
+from .. import _tgui
+from .._tgui import TGUI
+
 
 class Layout(TGUI):
+    """Base layout class.
+    """
+
     def __init__(self, **kwargs):
         """Initialize self. See help(type(self)) for accurate signature.
         """
 
-        kw = {'master': None, 'height': 0, 'width': 0, 'y': 0, 'x': 0,
-              'fg': None, 'bg': None, 'orient': None, 'pad_l': 1, 'pad_r': 1,
-              'pad_t': 1, 'pad_b': 1}
+        super().__init__()
 
-        for key, value in kwargs.items():
-            if key not in kw.keys():
-                error = f'{cls}.__init__() got an unexpected keyword argument '
-                error += f"'{key}'"
+        self._kwargs = kwargs
 
-                raise TypeError(strerr)
-
-            kw[key] = value
-
-        super(Layout, self).__init__(a_dict=kw)
-
-        self._master = kw.get('master')
-        self._height, self._width = kw.get('height'), kw.get('width')
-        self._y, self._x = kw.get('y'), kw.get('x')
-        self._fg, self._bg = kw.get('fg'), kw.get('bg')
-        # current anchor position for children
-        self._cur_y, self._cur_x = 0, 0
-        self._orient = kw.get('orient')
-        self._pad_l, self._pad_r, self._pad_t, self._pad_b  = (kw.get('pad_l'),
-                                                               kw.get('pad_r'),
-                                                               kw.get('pad_t'),
-                                                               kw.get('pad_b'))
-
-    def _create_label(self, master, text, height, width, anchor_y, anchor_x,
-                      fg, bg)
-        """TODO: text alignment to center, left, right, top, bottom, ...
-                 text fonts (style, weight, size)
+    def _create_layout(self, layout, fg, bg, *args):
+        """Create a new layout.
         """
 
-        win, pan = self._create_view(master, height, width, anchor_y, anchor_x,
-                                     fg, bg)
-        win.addstr(text)
-
-    def _create_view(self, master, height, width, anchor_y, anchor_x, fg, bg):
-        if master is None:
-            win = curses.newwin(height, width, anchor_y, anchor_x)
-            win.bkgd(' ', 1)    # TODO
+        if layout is None:
+            self._win = self._stdscr.derwin(*args)
         else:
-            win = master.derwin(height, width, anchor_y, anchor_x)
+            self._win = layout._win.derwin(*args)
 
-        pan = panel.new_panel(win)
+        self._pan = panel.new_panel(self._win)
 
-        return (win, pan)
+        self.set_color(fg, bg)
+
+        self.hide()
+
+    def _create_linear(self):
+        """Create a new linear layout.
+        """
+
+        size = self._kwargs.get('size')
+        orient = self._kwargs.get('orient')
+        wrap = self._kwargs.get('wrap')
+        color = self._kwargs.get('color')
+        # TODO padding = self._kwargs.get('padding')
+
+        # current anchor position for widgets or sub-layouts
+        self._cur_y, self._cur_x = 0, 0
+
+        if size is None:
+            error = 'wrap content: get the size of all widgets and sub-layouts'
+
+            raise NotImplementedError(error)
+
+        if isinstance(size, tuple):
+            height, width = size
+        else:
+            height, width = size, size
+
+        if anchor is None:
+            error = 'anchor layout at next available position'
+
+            raise NotImplementedError(error)
+
+        if isinstance(anchor, tuple):
+            y, x = anchor
+        else:
+            y, x = anchor, anchor
+
+        if color is None:
+            # TODO use the terminal default display color
+            fg, bg = curses.COLOR_BLACK, curses.COLOR_WHITE
+        elif isinstance(color, tuple):
+            fg, bg = color
+        else:
+            fg, bg = color, color
+
+        self._create_layout(self.layout, fg, bg, height, width, y, x)
+
+    def _set_color_pair(self, fg, bg):
+        """Initialize color pair for the layout.
+
+        Args:
+            fg (int): foreground color for the layout.
+            bg (int): background color for the layout.
+
+        Return:
+            return the pair number of the color.
+        """
+
+        _COLOR_PAIR_NO += 1
+        curses.init_pair(self._color_pair_no, fg, bg)
