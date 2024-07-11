@@ -22,7 +22,7 @@ class Widget:
         self._layout = layout
         self._kwargs = kwargs
 
-	self._win, self._pan = None, None
+        self._win, self._pan = None, None
 
     def _create_widget(self, color, *args):
         """Creates a new widget object.
