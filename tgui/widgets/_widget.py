@@ -91,9 +91,15 @@ class Widget:
         self._kwargs['color'] = color_pair
 
     def show(self):
+        """Display the widget.
+        """
+
         self._pan.show()
         self._win.refresh()
 
     def hide(self):
+        """Hide the widget.
+        """
+
         self._pan.hide()
         self._win.refresh()
