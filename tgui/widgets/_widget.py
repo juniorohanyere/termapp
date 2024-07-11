@@ -1,12 +1,9 @@
 """Base widget module.
 """
 
-import asyncio
 import curses
 from curses import panel
-import os
 
-from .. import _tgui
 
 class Widget:
     """Base widget class.
@@ -66,7 +63,7 @@ class Widget:
             error = 'anchor widget at next available position'
             raise NotImplementedError(error)
 
-        elif isinstance(anchor, tuple):
+        if isinstance(anchor, tuple):
             y, x = anchor
         else:
             y, x = anchor, anchor
