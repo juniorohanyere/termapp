@@ -12,15 +12,17 @@ class Widget:
     """Base widget class.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, layout, **kwargs):
         """Initialize self. See help(type(self)) for accurate signature.
 
         Args:
             kwargs (dict): dict containing keyworded arguments.
         """
 
+        self._layout = layout
         self._kwargs = kwargs
-        self._layout = None
+
+	self._win, self._pan = None, None
 
     def _create_widget(self, color, *args):
         """Creates a new widget object.
